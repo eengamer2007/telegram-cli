@@ -1,17 +1,15 @@
 use anyhow;
 use crossterm::{
-    event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode},
+    event::{DisableMouseCapture, EnableMouseCapture},
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use std::io;
 use std::sync::atomic::{AtomicBool, Ordering};
 use tokio::sync::mpsc::{self, Receiver, Sender};
-use tokio::sync::Mutex;
+
 use tui::{
     backend::CrosstermBackend,
-    layout::{Constraint, Direction, Layout},
-    widgets::{Block, Borders, Widget},
     Terminal,
 };
 
@@ -20,7 +18,7 @@ pub fn setup() -> anyhow::Result<Terminal<CrosstermBackend<io::Stdout>>> {
     let mut stdout = io::stdout();
     execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
     let backend = CrosstermBackend::new(stdout);
-    let mut terminal = Terminal::new(backend)?;
+    let terminal = Terminal::new(backend)?;
     Ok(terminal)
 }
 

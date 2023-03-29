@@ -5,16 +5,16 @@ use std::sync::{
     Arc,
 };
 use tdlib::{
-    enums::{AuthorizationState, Update, User},
+    enums::{User},
     functions,
 };
-use tokio::sync::mpsc::{self, Receiver, Sender};
-use tokio::sync::Mutex;
+use tokio::sync::mpsc::{self};
+
 
 mod render;
 mod telegram;
 
-use render::*;
+
 use telegram::*;
 
 #[derive(serde::Deserialize)]
@@ -47,7 +47,7 @@ async fn main() {
     let run_flag_auth_clone = run_flag.clone();
     let run_flag_render_clone = run_flag.clone();
 
-    let mut terminal: tui::Terminal<_> = render::setup().unwrap();
+    let terminal: tui::Terminal<_> = render::setup().unwrap();
     let (render_tx, render_handle) = render::start_render_thread(terminal, run_flag_render_clone);
 
     let h_render_tx = render_tx.clone();

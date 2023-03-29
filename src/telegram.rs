@@ -4,10 +4,10 @@ use std::sync::{
     Arc,
 };
 use tdlib::{
-    enums::{AuthorizationState, Update, User},
+    enums::{AuthorizationState, Update},
     functions,
 };
-use tokio::sync::mpsc::{self, Receiver, Sender};
+use tokio::sync::mpsc::{Receiver, Sender};
 
 use crate::render::RenderUpdate;
 
