@@ -7,4 +7,4 @@
 # close process
 1. close client_id
 2. wait for `closed` state
-3. join update recieve thread
+3. join update receive thread
