@@ -4,6 +4,7 @@ use std::sync::{
     atomic::{AtomicBool, Ordering},
     Arc,
 };
+use std::time::Duration;
 use tdlib::{
     enums::{User},
     functions,
@@ -76,10 +77,10 @@ async fn main() {
 
     // Tell the client to close
     functions::close(client_id).await.unwrap();
-
+    let _ = &render_tx.send(render::RenderUpdate::Exit).await.unwrap();
     // Handle the authorization state to wait for the "Closed" state
     handle_authorization_state(client_id, auth_rx, run_flag.clone(), &config).await;
-    &render_tx.send(render::RenderUpdate::Exit).await.unwrap();
+
     // Wait for the previously spawned task to end the execution
     handle.await.unwrap();
     render_handle.await.unwrap();

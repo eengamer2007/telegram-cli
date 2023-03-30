@@ -45,7 +45,9 @@ pub fn start_render_thread(
     // spawn a task to update the UI
     let render_handle = tokio::spawn(async move {
         while run_flag.load(Ordering::Acquire) {
-            state.update();
+            if state.update() {
+                return
+            };
             tokio::time::sleep(std::time::Duration::from_millis(10)).await;
         }
     });
@@ -76,15 +78,17 @@ impl TerminalState {
         )
     }
 
-    pub fn update(&mut self) {
+    pub fn update(&mut self) -> bool {
         if let Ok(update) = self.rx.try_recv() {
             match update {
                 RenderUpdate::Exit => {
-                    println!("exit the program");
+                    println!("exit signal received");
                     exit(&mut self.terminal).unwrap();
+                    return true
                 }
                 _ => {}
             }
         }
+        false
     }
 }
